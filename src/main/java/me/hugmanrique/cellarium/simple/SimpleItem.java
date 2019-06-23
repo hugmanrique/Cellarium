@@ -43,8 +43,9 @@ public class SimpleItem<T> implements Item<T> {
             this.type = Objects.requireNonNull(type);
         }
 
-        public void defaultValue(T defaultValue) {
+        public Builder<T> defaultValue(T defaultValue) {
             this.defaultValue = defaultValue;
+            return this;
         }
 
         public SimpleItem<T> build() {
