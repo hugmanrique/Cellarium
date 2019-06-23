@@ -1,11 +1,22 @@
 package me.hugmanrique.cellarium;
 
+import me.hugmanrique.cellarium.simple.SimpleRepository;
+
 import java.util.Optional;
 
 /**
  * Represents a typesafe heterogeneous container of items.
  */
 public interface Repository {
+
+    /**
+     * Creates a new empty repository instance.
+     *
+     * @return a new empty repository instance
+     */
+    static Repository create() {
+        return new SimpleRepository();
+    }
 
     /**
      * Returns {@code true} if the given item has an associated value in this repository.
