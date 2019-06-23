@@ -1,0 +1,22 @@
+# IntelliJ
+**/out
+.idea
+*.iml
+
+# Maven
+**/target
+**/dependency-reduced-pom.xml
+
+# Package files
+*.jar
+*.tar.gz
+
+# Virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+*.log
+.DS_Store
+*.ipr
+*.iws
+
+src/main/java/me/hugmanrique/old
