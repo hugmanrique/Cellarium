@@ -8,6 +8,8 @@
 
 This is a really powerful abstraction that can, for example, model database rows (that can have arbitrarily many columns of different types), user settings, or player statistics.
 
+This project started as an exercise implementation of Joshua Bloch's [_Effective Java_, 3rd edition](https://www.amazon.com/Effective-Java-Joshua-Bloch/dp/0134685997) Item 33: Consider typesafe heterogeneous containers. In the process, I designed a more flexible and capable API and decided to release it.
+
 ## Getting started
 
 You can install CraftPatch using [Maven](https://maven.apache.org/) by adding the JitPack repository to your `pom.xml` file:
