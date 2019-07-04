@@ -79,10 +79,10 @@ public class Player {
     public void onWin() {
         // Set new ranking
         int eloDiff = 4; // TODO Perform actual calculation
-        IntItemUtil.addToValue(statistics, ChessStatistics.ELO, eloDiff);
+        statistics.apply(ChessStatistics.ELO, value -> value + eloDiff);
 
         // Increment win count by 1
-        IntItemUtil.incrementValue(statistics, ChessStatistics.WINS);
+        statistics.apply(ChessStatistics.WINS, IntItemUtil::increment);
 
         // Set won last match
         statistics.setValue(ChessStatistics.WON_LAST_MATCH, true);
