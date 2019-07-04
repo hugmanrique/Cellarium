@@ -12,7 +12,7 @@ This project started as an exercise implementation of Joshua Bloch's [_Effective
 
 ## Getting started
 
-You can install CraftPatch using [Maven](https://maven.apache.org/) by adding the JitPack repository to your `pom.xml` file:
+You can install Cellarium using [Maven](https://maven.apache.org/) by adding the JitPack repository to your `pom.xml` file:
 
 ```xml
 <repositories>
