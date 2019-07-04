@@ -9,9 +9,9 @@ import java.util.NoSuchElementException;
 /**
  * Repository and item utilities related to enumerations.
  */
-public final class EnumItemUtil {
+public final class EnumStatistics {
 
-    private EnumItemUtil() {
+    private EnumStatistics() {
         throw new AssertionError();
     }
 
