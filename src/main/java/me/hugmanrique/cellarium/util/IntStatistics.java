@@ -4,6 +4,8 @@ import me.hugmanrique.cellarium.Item;
 import me.hugmanrique.cellarium.Repository;
 
 import java.util.NoSuchElementException;
+import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 
 /**
  * Repository and item utilities related to integers.
@@ -52,13 +54,16 @@ public final class IntStatistics {
      * @param item the item whose associated value is to be incremented
      * @throws NoSuchElementException if the item has no associated value nor default value
      * @return the item's value after incrementation
+     * @deprecated use {@link Repository#apply(Item, UnaryOperator)} with {@link #increment(int)} instead
      */
+    @Deprecated
     public static int incrementValue(Repository repository, Item<Integer> item) {
         return addToValue(repository, item, 1);
     }
 
     /**
-     * Increments the given value by {@code 1}.
+     * Returns the given value {@code + 1}.
+     *
      * @param value the operand
      * @return the value after incrementation
      */

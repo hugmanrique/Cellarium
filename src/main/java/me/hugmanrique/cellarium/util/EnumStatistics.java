@@ -5,6 +5,7 @@ import me.hugmanrique.cellarium.Repository;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.function.BiFunction;
 
 /**
  * Repository and item utilities related to enumerations.
@@ -52,6 +53,7 @@ public final class EnumStatistics {
      * @param <T> the enum's type
      * @throws NoSuchElementException if the item has no associated value nor default value
      * @return the new item's value
+     * @deprecated use {@link Repository#apply(Item, BiFunction)} with {@link #getNextValue(Item, Enum)} instead
      */
     @Deprecated
     public static <T extends Enum<?>> T setNextValue(Repository repository, Item<T> item) {
