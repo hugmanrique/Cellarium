@@ -111,7 +111,7 @@ public final class ChessStatistics {
     // ...
     
     public static final Item<Rank> RANK = new SimpleItem.Builder<>("rank", Rank.class)
-            .defaultValue((Rank).BEGINNER)
+            .defaultValue(Rank.BEGINNER)
             .build();
 }
 ```
