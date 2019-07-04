@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 public class SimpleRepository implements Repository {
 
@@ -35,6 +36,15 @@ public class SimpleRepository implements Repository {
                 // Achieve runtime type safety with dynamic casts
                 item.cast(items.put(item, item.cast(value)))
         );
+    }
+
+    @Override
+    public <T> Optional<T> apply(Item<T> item, UnaryOperator<T> operation) {
+        Objects.requireNonNull(operation);
+
+        T currentValue = getValue(item).orElse(null);
+
+        return setValue(item, operation.apply(currentValue));
     }
 
     @Override

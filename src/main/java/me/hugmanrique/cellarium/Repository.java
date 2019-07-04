@@ -3,6 +3,7 @@ package me.hugmanrique.cellarium;
 import me.hugmanrique.cellarium.simple.SimpleRepository;
 
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 /**
  * Represents a typesafe heterogeneous container of items.
@@ -47,6 +48,18 @@ public interface Repository {
      * @return the previous item's value, or {@link Optional#empty()} if no value was set
      */
     <T> Optional<T> setValue(Item<T> item, T value);
+
+    /**
+     * Applies the given operation on the current item's value. The produced result
+     * replaces the old value. If no value is set, the item's default value
+     * (which can be null) gets passed as the operand.
+     *
+     * @param item the item whose associated value is the operator
+     * @param operation the operation to apply to the current item's value
+     * @param <T> the value's type
+     * @return the new item's value returned by the {@code operation}
+     */
+    <T> Optional<T> apply(Item<T> item, UnaryOperator<T> operation);
 
     /**
      * Removes the value associated with the given item.
