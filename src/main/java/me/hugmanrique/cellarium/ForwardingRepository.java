@@ -2,6 +2,8 @@ package me.hugmanrique.cellarium;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 
 /**
  * A repository that forwards all its method calls to another repository.
@@ -30,6 +32,16 @@ public class ForwardingRepository implements Repository {
     @Override
     public <T> Optional<T> setValue(Item<T> item, T value) {
         return repository.setValue(item, value);
+    }
+
+    @Override
+    public <T> Optional<T> apply(Item<T> item, UnaryOperator<T> operation) {
+        return repository.apply(item, operation);
+    }
+
+    @Override
+    public <T> Optional<T> apply(Item<T> item, BiFunction<Item<T>, T, T> operation) {
+        return repository.apply(item, operation);
     }
 
     @Override
