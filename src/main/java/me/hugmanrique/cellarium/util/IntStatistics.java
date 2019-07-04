@@ -8,9 +8,9 @@ import java.util.NoSuchElementException;
 /**
  * Repository and item utilities related to integers.
  */
-public final class IntItemUtil {
+public final class IntStatistics {
 
-    private IntItemUtil() {
+    private IntStatistics() {
         throw new AssertionError();
     }
 

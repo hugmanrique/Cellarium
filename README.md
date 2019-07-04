@@ -82,7 +82,7 @@ public class Player {
         statistics.apply(ChessStatistics.ELO, value -> value + eloDiff);
 
         // Increment win count by 1
-        statistics.apply(ChessStatistics.WINS, IntItemUtil::increment);
+        statistics.apply(ChessStatistics.WINS, IntStatistics::increment);
 
         // Set won last match
         statistics.setValue(ChessStatistics.WON_LAST_MATCH, true);

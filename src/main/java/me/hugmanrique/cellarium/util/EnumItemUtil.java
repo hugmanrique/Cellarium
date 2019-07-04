@@ -15,7 +15,16 @@ public final class EnumItemUtil {
         throw new AssertionError();
     }
 
-    private static <T extends Enum<?>> T getNextValue(Item<T> item, T previous) {
+    /**
+     * Returns the next enum's constant of {@code Class<T>} by ordinal order.
+     * If {@code previous} is the last enum constant, returns the first constant.
+     *
+     * @param item the item whose associated value is to be updated
+     * @param previous the previous enum constant value
+     * @param <T> the enum's type
+     * @return the new item's value
+     */
+    public static <T extends Enum<?>> T getNextValue(Item<T> item, T previous) {
         T[] constants = item.getType().getEnumConstants();
         int index = Arrays.asList(constants).indexOf(previous);
 
@@ -44,6 +53,7 @@ public final class EnumItemUtil {
      * @throws NoSuchElementException if the item has no associated value nor default value
      * @return the new item's value
      */
+    @Deprecated
     public static <T extends Enum<?>> T setNextValue(Repository repository, Item<T> item) {
         T currentValue = repository.getValue(item).orElseThrow();
         T newValue = getNextValue(item, currentValue);
@@ -52,5 +62,4 @@ public final class EnumItemUtil {
 
         return newValue;
     }
-
 }

@@ -3,6 +3,7 @@ package me.hugmanrique.cellarium;
 import me.hugmanrique.cellarium.simple.SimpleRepository;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
 /**
@@ -57,9 +58,21 @@ public interface Repository {
      * @param item the item whose associated value is the operator
      * @param operation the operation to apply to the current item's value
      * @param <T> the value's type
-     * @return the new item's value returned by the {@code operation}
+     * @return the new item's value returned by {@code operation}
      */
     <T> Optional<T> apply(Item<T> item, UnaryOperator<T> operation);
+
+    /**
+     * Applies the given operation on the current item's value. The produced result
+     * replaces the old value. If no value is set, the item's default value
+     * (which can be null) gets passed as the operand.
+     *
+     * @param item the item whose associated value is the operator. The first {@link BiFunction#apply(Object, Object)} argument
+     * @param operation the operation to apply to the current item's value
+     * @param <T> the value's type
+     * @return the new item's value returned by {@code operation}
+     */
+    <T> Optional<T> apply(Item<T> item, BiFunction<Item<T>, T, T> operation);
 
     /**
      * Removes the value associated with the given item.
