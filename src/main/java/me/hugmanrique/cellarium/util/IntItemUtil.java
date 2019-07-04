@@ -56,4 +56,13 @@ public final class IntItemUtil {
     public static int incrementValue(Repository repository, Item<Integer> item) {
         return addToValue(repository, item, 1);
     }
+
+    /**
+     * Increments the given value by {@code 1}.
+     * @param value the operand
+     * @return the value after incrementation
+     */
+    public static int increment(int value) {
+        return value + 1;
+    }
 }
