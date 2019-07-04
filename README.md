@@ -70,7 +70,7 @@ public final class ChessStatistics {
 } 
 ```
 
-Finally, let's create an `onWin` method
+Finally, let's create an `onWin` method:
 
 ```java
 public class Player {
@@ -90,9 +90,52 @@ public class Player {
 }
 ```
 
-Repositories can store any kind of object. In this case, we used [`IntItemUtil`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/IntItemUtil.html) to handle common tasks such as incrementing a statistic.
+Repositories can store any kind of object. In this case, we used [`IntStatistics`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/IntStatistics.html) to handle common tasks such as incrementing a statistic.
 
-Cellarium also includes utilities for booleans in [`BooleanItemUtil`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/BooleanItemUtil.html), and enumerations in [`EnumItemUtil`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/EnumItemUtil.html).
+## Enum example
+
+Let's add a `Rank` enum expressing the current position of a chess `Player`:
+
+```java
+public enum Rank {
+    BEGINNER,
+    CHAMPION,
+    MASTER
+}
+```
+
+Now, let's create the `RANK` statistic:
+
+```java
+public final class ChessStatistics {
+    // ...
+    
+    public static final Item<Rank> RANK = new SimpleItem.Builder<>("rank", Rank.class)
+            .defaultValue((Rank).BEGINNER)
+            .build();
+}
+```
+
+Finally, let's add a level-up method to the `Player` class:
+
+```java
+public class Player {
+    // ...
+    
+    public void levelUp() {
+        if (statistics.getValue(ChessStatistics.RANK).equals(Optional.of(Rank.MASTER))) {
+            throw new IllegalStateException("Cannot rank-up player with highest rank");
+        }
+        
+        statistics.apply(ChessStatistics.RANK, EnumStatistics::getNextValue);
+    }
+}
+```
+
+In this case we explicitly handled the case where the player already has the highest rank, but `EnumStatistics::getNextValue` cycles back to the first enum constant.
+
+You can read [`EnumStatistics`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/EnumStatistics.html) for additional documentation.
+Cellarium also includes utilities for booleans in [`BooleanStatistics`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/BooleanStatistics.html).
 
 Please note repositories are **not** thread-safe, so you will need to add synchronization for concurrent access.
 
