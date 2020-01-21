@@ -171,6 +171,100 @@ public class SimpleRepositoryTests {
     }
 
     @Test
+    void testComputeIfAbsent() {
+        SimpleRepository repository = SimpleRepository.newInstance();
+
+        // No current mapping
+
+        repository.computeIfAbsent(FOO, () -> "bar");
+        assertEquals("bar", repository.get(FOO));
+
+        repository.computeIfAbsent(BAR, () -> 11);
+        assertEquals(11, repository.get(BAR));
+
+        // Current mapping
+
+        repository.computeIfAbsent(FOO, () -> fail("Called mappingFunction while not absent"));
+        repository.computeIfAbsent(BAR, () -> fail("Called mappingFunction while not absent"));
+    }
+
+    @Test
+    void testComputeIfAbsentThrowsNPE() {
+        SimpleRepository repository = SimpleRepository.newInstance();
+
+        assertThrows(NullPointerException.class, () -> {
+            repository.computeIfAbsent(FOO, () -> null);
+        });
+
+        assertThrows(NullPointerException.class, () -> {
+            repository.computeIfAbsent(BAR, () -> null);
+        });
+    }
+
+    @Test
+    void testComputeIfAbsentRethrows() {
+        SimpleRepository repository = SimpleRepository.newInstance();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            repository.computeIfAbsent(FOO, () -> {
+                throw new IllegalArgumentException("dummy");
+            });
+        });
+
+        assertThrows(IllegalStateException.class, () -> {
+            repository.computeIfAbsent(FOO, () -> {
+                throw new IllegalStateException("dummy");
+            });
+        });
+    }
+
+    @Test
+    void testComputeIfPresent() {
+        SimpleRepository repository = SimpleRepository.newInstance();
+
+        // No current mapping
+
+        repository.computeIfPresent(FOO, s -> fail("Called remappingFunction while not present"));
+        repository.computeIfPresent(BAR, integer -> fail("Called remappingFunction while not present"));
+
+        // Current mapping
+
+        repository.put(FOO, "bar");
+        repository.computeIfPresent(FOO, previous -> {
+            assertEquals("bar", previous);
+            return "boo";
+        });
+
+        assertEquals("boo", repository.get(FOO));
+
+        repository.put(BAR, 15);
+        repository.computeIfPresent(BAR, previous -> {
+            assertEquals(15, previous);
+            return 14;
+        });
+
+        assertEquals(14, repository.get(BAR));
+
+        // Removal
+
+        repository.computeIfPresent(FOO, previous -> {
+            assertEquals("boo", previous);
+            return null;
+        });
+
+        assertFalse(repository.contains(FOO));
+        assertNull(repository.get(FOO));
+
+        repository.computeIfPresent(BAR, previous -> {
+            assertEquals(14, previous);
+            return null;
+        });
+
+        assertFalse(repository.contains(BAR));
+        assertEquals(BAR_DEFAULT, repository.get(BAR));
+    }
+
+    @Test
     void testReplace() {
         SimpleRepository repository = SimpleRepository.newInstance();
 
