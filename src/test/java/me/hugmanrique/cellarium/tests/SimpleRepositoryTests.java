@@ -146,6 +146,5 @@ public class SimpleRepositoryTests {
         assertThrows(NullPointerException.class, () -> repository.replace(BAR, 17, null));
         assertThrows(NullPointerException.class, () -> repository.remove(null));
         assertThrows(NullPointerException.class, () -> repository.remove(FOO, null));
-        assertThrows(NullPointerException.class, () -> repository.contains(null));
     }
 }

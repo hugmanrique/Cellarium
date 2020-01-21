@@ -78,8 +78,10 @@ public class SimpleRepository implements Repository {
     @Nullable
     @Override
     public <T> T get(Key<T> key) {
-        return key.cast(
+        T value = key.cast(
                 items.get(requireNonNull(key, "key")));
+
+        return value != null ? value : key.defaultValue();
     }
 
     @Nullable
