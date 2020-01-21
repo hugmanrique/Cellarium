@@ -44,7 +44,7 @@ public final class EnumValues {
             throw new AssertionError("Enum instance not found in constant array");
         }
 
-        int newIndex = (previousIndex + offset) % constants.length;
+        int newIndex = Math.floorMod(previousIndex + offset, constants.length);
 
         return constants[newIndex];
     }
