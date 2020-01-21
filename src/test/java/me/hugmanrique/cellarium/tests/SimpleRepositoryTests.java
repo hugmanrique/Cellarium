@@ -124,6 +124,53 @@ public class SimpleRepositoryTests {
     }
 
     @Test
+    void testCompute() {
+        SimpleRepository repository = SimpleRepository.newInstance();
+
+        // No current mapping
+
+        repository.compute(FOO, previous -> {
+            assertNull(previous); // No default value
+            return "bar";
+        });
+
+        assertEquals("bar", repository.get(FOO));
+
+        repository.compute(BAR, previous -> {
+            assertEquals(BAR_DEFAULT, previous);
+            return 8;
+        });
+
+        assertEquals(8, repository.get(BAR));
+
+        // Current mapping
+
+        repository.compute(FOO, previous -> {
+            assertEquals("bar", previous);
+            return "bar2";
+        });
+
+        assertEquals("bar2", repository.get(FOO));
+
+        repository.compute(BAR, previous -> {
+            assertEquals(8, previous);
+            return 7;
+        });
+
+        assertEquals(7, repository.get(BAR));
+
+        // Removal
+
+        repository.compute(FOO, s -> null);
+        assertFalse(repository.contains(FOO));
+        assertNull(repository.get(FOO));
+
+        repository.compute(BAR, integer -> null);
+        assertFalse(repository.contains(BAR));
+        assertEquals(BAR_DEFAULT, repository.get(BAR));
+    }
+
+    @Test
     void testReplace() {
         SimpleRepository repository = SimpleRepository.newInstance();
 
@@ -164,7 +211,7 @@ public class SimpleRepositoryTests {
         repository.clear();
 
         assertTrue(repository.isEmpty());
-        assertNull(repository.get(FOO));
+        assertFalse(repository.contains(FOO));
         assertEquals(BAR_DEFAULT, repository.get(BAR));
     }
 

@@ -22,7 +22,7 @@ public final class EnumItems {
      * @param <T> the enum's type
      * @return the new item's value
      */
-    public static <T extends Enum<?>> T getNextValue(Item<T> item, T previous) {
+    /*public static <T extends Enum<?>> T getNextValue(Item<T> item, T previous) {
         T[] constants = item.getType().getEnumConstants();
         int index = Arrays.asList(constants).indexOf(previous);
 
@@ -39,7 +39,7 @@ public final class EnumItems {
         }
 
         return constants[newIndex];
-    }
+    }*/
 
     /**
      * Gets the next enum's constant of {@code Class<T>}, and sets it
@@ -52,7 +52,7 @@ public final class EnumItems {
      * @return the new item's value
      * @deprecated use {@link Repository#apply(Item, BiFunction)} with {@link #getNextValue(Item, Enum)} instead
      */
-    @Deprecated
+    /*@Deprecated
     public static <T extends Enum<?>> T setNextValue(Repository repository, Item<T> item) {
         return null;
         /*T currentValue = repository.getValue(item).orElseThrow();
@@ -61,5 +61,5 @@ public final class EnumItems {
         repository.setValue(item, newValue);
 
         return newValue;*/
-    }
+    //}
 }

@@ -21,14 +21,14 @@ public final class IntItems {
      * @throws NoSuchElementException if the item has no associated value nor default value
      * @return the item's value after incrementation
      */
-    public static int addToValue(Repository repository, Item<Integer> item, int addend) {
+    /*public static int addToValue(Repository repository, Item<Integer> item, int addend) {
         int oldValue = repository.getValue(item).get();
         int newValue = oldValue + addend;
 
         repository.setValue(item, newValue);
 
         return newValue;
-    }
+    }*/
 
     /**
      * Decrements the value for the given item by {@code subtrahend}.
@@ -39,9 +39,9 @@ public final class IntItems {
      * @throws NoSuchElementException if the item has no associated value nor default value
      * @return the item's value after subtraction
      */
-    public static int subtractFromValue(Repository repository, Item<Integer> item, int subtrahend) {
+    /*public static int subtractFromValue(Repository repository, Item<Integer> item, int subtrahend) {
         return addToValue(repository, item, -subtrahend);
-    }
+    }*/
 
     /**
      * Increments the value for the given item by {@code 1}.
@@ -52,10 +52,10 @@ public final class IntItems {
      * @return the item's value after incrementation
      * @deprecated use {@link Repository#apply(Item, UnaryOperator)} with {@link #increment(int)} instead
      */
-    @Deprecated
+    /*@Deprecated
     public static int incrementValue(Repository repository, Item<Integer> item) {
         return addToValue(repository, item, 1);
-    }
+    }*/
 
     /**
      * Returns the given value {@code + 1}.
@@ -63,7 +63,7 @@ public final class IntItems {
      * @param value the operand
      * @return the value after incrementation
      */
-    public static int increment(int value) {
+    /*public static int increment(int value) {
         return value + 1;
-    }
+    }*/
 }
