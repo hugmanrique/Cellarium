@@ -23,10 +23,12 @@ public class SimpleRepository implements Repository {
     public <T> Optional<T> getValue(Item<T> item) {
         Objects.requireNonNull(item);
 
-        return Optional
+        return null;
+
+        /*return Optional
                 // Achieve runtime type safety with dynamic cast
                 .ofNullable(item.cast(items.get(item)))
-                .or(item::getDefaultValue);
+                .or(item::getDefaultValue);*/
     }
 
     @Override

@@ -1,6 +1,6 @@
 package me.hugmanrique.cellarium.v2;
 
-import java.util.Optional;
+import javax.annotation.Nullable;
 
 /**
  * A parameterized key that can be mapped to values in a {@link Repository}.
@@ -17,11 +17,13 @@ public interface Key<T> {
     Class<T> type();
 
     /**
-     * Returns the default value associated to this key.
+     * Returns the default value associated to this key, or {@code null} if
+     * not defined.
      *
-     * @return the default value of this key, or {@link Optional#empty()} if not defined
+     * @return the default value of this key, or {@code null} if not defined
      */
-    Optional<T> defaultValue();
+    @Nullable
+    T defaultValue();
 
     /**
      * Casts an object to the type referenced by this key's {@link #type()} object.
@@ -30,7 +32,7 @@ public interface Key<T> {
      * @return the object after casting, or {@code null} if {@code object} is {@code null}
      * @throws ClassCastException if the object is not null and is not assignable to {@link #type()}
      */
-    default T cast(Object object) {
+    default T cast(@Nullable Object object) {
         return type().cast(object);
     }
 }

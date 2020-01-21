@@ -57,11 +57,12 @@ public final class EnumItems {
      */
     @Deprecated
     public static <T extends Enum<?>> T setNextValue(Repository repository, Item<T> item) {
-        T currentValue = repository.getValue(item).orElseThrow();
+        return null;
+        /*T currentValue = repository.getValue(item).orElseThrow();
         T newValue = getNextValue(item, currentValue);
 
         repository.setValue(item, newValue);
 
-        return newValue;
+        return newValue;*/
     }
 }

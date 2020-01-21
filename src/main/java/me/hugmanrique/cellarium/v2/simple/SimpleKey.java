@@ -4,7 +4,6 @@ import me.hugmanrique.cellarium.v2.Key;
 import me.hugmanrique.cellarium.v2.Repository;
 
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * An immutable {@link Key}.
@@ -15,14 +14,11 @@ import java.util.Optional;
 public class SimpleKey<T> implements Key<T> {
 
     private final Class<T> type;
-    // Since the default value is immutable, we can cache the Optional,
-    // avoiding object allocations when calling #defaultValue.
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private final Optional<T> defaultValue;
+    private final T defaultValue;
 
     private SimpleKey(Builder<T> builder) {
         this.type = builder.type;
-        this.defaultValue = Optional.ofNullable(builder.defaultValue);
+        this.defaultValue = builder.defaultValue;
     }
 
     @Override
@@ -31,7 +27,7 @@ public class SimpleKey<T> implements Key<T> {
     }
 
     @Override
-    public Optional<T> defaultValue() {
+    public T defaultValue() {
         return defaultValue;
     }
 
