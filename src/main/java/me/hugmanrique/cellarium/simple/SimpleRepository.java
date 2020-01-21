@@ -134,6 +134,7 @@ public class SimpleRepository implements Repository {
                         requireNonNull(mappingFunction.get(), "new value")));
     }
 
+    @Nullable
     @Override
     public <T> T computeIfPresent(Key<T> key, UnaryOperator<T> remappingFunction) {
         requireNonNull(key, "key");

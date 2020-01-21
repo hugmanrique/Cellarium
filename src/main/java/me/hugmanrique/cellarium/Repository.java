@@ -81,7 +81,7 @@ public interface Repository {
      * this repository.
      *
      * <p>Unlike regular maps, if the mapping function returns {@code null},
-     * {@link NullPointerException} is thrown.
+     * a {@link NullPointerException} is thrown.
      *
      * @param key key with which the computed value is to be associated
      * @param mappingFunction mapping function to compute a value
@@ -104,6 +104,7 @@ public interface Repository {
      * @param <T> the type of the value
      * @return the new value associated with the specified key, or {@code null} if none
      */
+    @Nullable
     <T> T computeIfPresent(Key<T> key, UnaryOperator<T> remappingFunction);
 
     /**
