@@ -4,11 +4,14 @@
 [![tests][tests]][tests-url]
 [![license][license]][license-url]
 
-**Cellarium** is a typesafe heterogeneous container API. Unlike an ordinary Java map, a `Repository` may contain `Item`s (i.e. keys) of different types.
+**Cellarium** is a typesafe heterogeneous container API. Unlike a regular map, the [`Repository`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/Repository.html) _keys_ are parameterized instead of the map.
+This means that all the keys are of different types, allowing a [`Repository`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/Repository.html) instance to hold values of many (i.e. heterogeneous) types.
+This type token is used to guarantee that the type of a value agrees with its [`Key`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/Key.html).
 
-This is a really powerful abstraction that can, for example, model database rows (that can have arbitrarily many columns of different types), user settings, or player statistics.
+This is a really powerful abstraction that can, for example, model database rows (that can have arbitrarily many columns of different types), user settings, player statistics...
 
-This project started as an exercise implementation of Joshua Bloch's [_Effective Java_, 3rd edition](https://www.amazon.com/Effective-Java-Joshua-Bloch/dp/0134685997) Item 33: Consider typesafe heterogeneous containers. In the process, I designed a more flexible and capable API and decided to release it.
+This project started as an exercise implementation of Joshua Bloch's [_Effective Java_, 3rd edition](https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/) Item 33: Consider typesafe heterogeneous containers.
+In the process, I designed a more flexible and capable API and decided to open source it.
 
 ## Getting started
 
@@ -33,113 +36,84 @@ Next, add the `Cellarium` dependency:
 </dependency>
 ```
 
-You will need to have Java 11 or later (older versions _might_ work).
+You will need to have Java 8 or later.
 
 ## Usage
 
-As an example, we're going to create a statistics [`Repository`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/Repository.html) that allows its clients to store and retrieve the value of any given statistic (in Cellarium's jargon, an [`Item`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/Item.html)) for a given player.
+As an example, we're going to create a statistics [`Repository`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/Repository.html) that allows its clients to store and retrieve the value of any given statistic by its [`Key`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/Key.html).
 
-First, let's create a [`Repository`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/Repository.html) field on the `Player` class:
+First, let's add the statistics [`Repository`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/Repository.html) to the `Player` class:
 
 ```java
 public class Player {
     private final Repository statistics;
-    
+
     public Player() {
         // ...
-        this.statistics = Repository.create();
+        this.statistics = SimpleRepository.newInstance();
     }
 }
 ```
 
-Now, let's create the chess statistics we want to manage:
+> The default `SimpleRepository` is not thread-safe. Check the javadocs on [`SimpleRepository.newConcurrentInstance()`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/simple/SimpleRepository.html#newConcurrentInstance()) to see how to create a thread-safe `Repository`.
 
-```java
-public final class ChessStatistics {
-    public static final Item<Integer> ELO = new SimpleItem.Builder<>("elo", Integer.class)
-            .defaultValue(1200)
-            .build();
-    
-    public static final Item<Integer> WINS = new SimpleItem.Builder<>("wins", Integer.class)
-            .defaultValue(0)
-            .build();
-
-    public static final Item<Boolean> WON_LAST_MATCH = new SimpleItem.Builder<>("won_last_match", Boolean.class)
-            .defaultValue(false)
-            .build();
-} 
-```
-
-Finally, let's create an `onWin` method:
-
-```java
-public class Player {
-    // ...
-    
-    public void onWin() {
-        // Set new ranking
-        int eloDiff = 4; // TODO Perform actual calculation
-        statistics.apply(ChessStatistics.ELO, value -> value + eloDiff);
-
-        // Increment win count by 1
-        statistics.apply(ChessStatistics.WINS, IntStatistics::increment);
-
-        // Set won last match
-        statistics.setValue(ChessStatistics.WON_LAST_MATCH, true);
-    }
-}
-```
-
-Repositories can store any kind of object. In this case, we used [`IntStatistics`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/IntStatistics.html) to handle common tasks such as incrementing a statistic.
-
-## Enum example
-
-Let's add a `Rank` enum expressing the current position of a chess `Player`:
+Next, let's create the chess statistics we want to track:
 
 ```java
 public enum Rank {
-    BEGINNER,
-    CHAMPION,
-    MASTER
+    BEGINNER, CHAMPION, MASTER
 }
-```
 
-Now, let's create the `RANK` statistic:
+public final class Statistics {
+    public static final Key<Integer> ELO = new SimpleKey.Builder<>(Integer.class)
+            .defaultValue(1200)
+            .build();
 
-```java
-public final class ChessStatistics {
-    // ...
-    
-    public static final Item<Rank> RANK = new SimpleItem.Builder<>("rank", Rank.class)
+    public static final Key<Integer> WIN_COUNT = new SimpleKey.Builder<>(Integer.class)
+            .defaultValue(0)
+            .build();
+
+    public static final Key<Rank> RANK = new SimpleKey.Builder<>(Rank.class)
             .defaultValue(Rank.BEGINNER)
             .build();
 }
 ```
 
-Finally, let's add a level-up method to the `Player` class:
+Now, let's create an `onWin` method:
 
 ```java
 public class Player {
     // ...
-    
-    public void levelUp() {
-        if (statistics.getValue(ChessStatistics.RANK).equals(Optional.of(Rank.MASTER))) {
-            throw new IllegalStateException("Cannot rank-up player with highest rank");
-        }
-        
-        statistics.apply(ChessStatistics.RANK, EnumStatistics::getNextValue);
+
+    public void onWin(int eloDelta) {
+        // Update ELO
+        int newElo = statistics.compute(Statistics.ELO, previous -> previous + eloDelta);
+        broadcast("New player ELO is " + newElo);
+
+        // Increase win count
+        statistics.compute(Statistics.WIN_COUNT, IntegerValues::increment);
     }
 }
 ```
 
-In this case we explicitly handled the case where the player already has the highest rank, but `EnumStatistics::getNextValue` cycles back to the first enum constant.
+Repositories have a really similar API to [`java.util.Map`](https://docs.oracle.com/javase/10/docs/api/java/util/Map.html). In this case, we used the `#compute(Key<T>, UnaryOperator<T>)` method to atomically update the ELO and win count of the player.
+For the later, we used the [`IntegerValues.increment`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/IntegerValues.html#increment(int)) method reference. Cellarium includes value utilities for most primitives
+in the [`me.hugmanrique.cellarium.util`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/package-summary.html) package.
 
-You can read [`EnumStatistics`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/EnumStatistics.html) for additional documentation.
-Cellarium also includes utilities for booleans in [`BooleanStatistics`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/BooleanStatistics.html).
+Finally, let's add a `levelUp` method to `Player`:
 
-Please note repositories are **not** thread-safe, so you will need to add synchronization for concurrent access.
+```java
+public class Player {
+    // ...
 
-Additional documentation for individual features can be found in the [Javadoc](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/). For additional help, you can create an issue and I will try to respond as fast as I can.  
+    public void levelUp() {
+        // e.g. BEGINNER -> CHAMPION
+        statistics.compute(Statistics.RANK, EnumValues::nextValue);
+    }
+}
+```
+
+Additional documentation for individual features can be found in the [javadocs](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/). For additional help, you can create an issue and I will try to respond as fast as I can.
 
 # License
 

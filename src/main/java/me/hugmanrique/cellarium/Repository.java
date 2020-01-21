@@ -1,85 +1,183 @@
 package me.hugmanrique.cellarium;
 
-import me.hugmanrique.cellarium.simple.SimpleRepository;
-
-import java.util.Optional;
-import java.util.function.BiFunction;
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 /**
- * Represents a typesafe heterogeneous container of items.
+ * A typesafe heterogeneous container that maps {@link Key}s to values.
+ *
+ * <p>Unlike a regular map, the {@link Key} is parameterized instead of the map.
+ * This means that all the keys are of different types, allowing a {@code Repository}
+ * instance to hold values of many (i.e. heterogeneous) types. This type token is
+ * used to guarantee that the type of a value agrees with its {@link Key}.
+ *
+ * TODO Document no null keys allowed
+ *
+ * @since 1.0
+ * @author Hugo Manrique
+ * @see <a href="http://www.informit.com/articles/article.aspx?p=2861454&seqNum=8">Joshua Bloch's Effective Java Item 33</a>
  */
 public interface Repository {
 
     /**
-     * Creates a new empty repository instance.
+     * Returns the value to which the specified key is mapped, or the key's
+     * default value if this repository contains no mapping for the key.
      *
-     * @return a new empty repository instance
+     * @param key key whose associated value is to be returned
+     * @param <T> the type of the value
+     * @return the value to which the specified key is mapped, or the key's default
+     *         value if this repository contains no mapping for the key
      */
-    static Repository create() {
-        return new SimpleRepository();
-    }
+    @Nullable
+    <T> T get(Key<T> key);
 
     /**
-     * Returns {@code true} if the given item has an associated value in this repository.
+     * Associates the specified value with the specified key in this repository.
+     * If the key already had an associated value, the old value is replaced by
+     * the specified value.
      *
-     * @param item the item whose presence in the repository is to be tested
-     * @return {@code true} if the given item has an associated value
+     * @param key key with which the specified value is to be associated
+     * @param value value to be associated with the specified key
+     * @param <T> the type of the value
+     * @return the previous value associated with {@code key}, or {@code null} if
+     *         there was no mapping for {@code key}
      */
-    boolean hasValue(Item<?> item);
+    @Nullable
+    <T> T put(Key<T> key, T value);
 
     /**
-     * Returns the value of the given item. If no value is set,
-     * returns the item's default value (which can be null, in which
-     * case {@link Optional#empty()} is returned).
+     * If the specified key is not associated with a value, associates it with the
+     * given value and returns {@code null}, else returns the current value.
      *
-     * @param item the item whose associated value is to be returned
-     * @param <T> the value's type
-     * @return the value of the given item, or {@link Optional#empty()} if no value and default value are set
+     * @param key key with which the specified value is to be associated
+     * @param value value to be associated with the specified key
+     * @param <T> the type of the value
+     * @return the previous value associated with {@code key}, or {@code null} if
+     *         there was no mapping for {@code key}
      */
-    <T> Optional<T> getValue(Item<T> item);
+    @Nullable
+    <T> T putIfAbsent(Key<T> key, T value);
 
     /**
-     * Sets the value for the given item. If the item already had an associated
-     * value, the old value is replaced by the specified value.
+     * Attempts to compute a mapping for the specified key and its current mapped
+     * value (or the key's default value if there is no current mapping).
      *
-     * @param item the item whose associated value is to be set
-     * @param value the new value
-     * @param <T> the value's type
-     * @return the previous item's value, or {@link Optional#empty()} if no value was set
+     * <p>If the remapping function returns {@code null}, the mapping is removed.
+     * If the remapping function itself throws an (unchecked) exception, the
+     * exception is rethrown, and the current mapping is left unchanged.
+     *
+     * @param key key with which the computed value is to be associated
+     * @param remappingFunction remapping function to compute a value
+     * @param <T> the type of the value
+     * @return the new value associated with the specified key, or {@code null} if none
      */
-    <T> Optional<T> setValue(Item<T> item, T value);
+    @Nullable
+    <T> T compute(Key<T> key, UnaryOperator<T> remappingFunction);
 
     /**
-     * Applies the given operation on the current item's value. The produced result
-     * replaces the old value. If no value is set, the item's default value
-     * (which can be null) gets passed as the operand.
+     * If the specified key is not already associated with a value, attempts to
+     * compute its value using the given mapping function and enters it into
+     * this repository.
      *
-     * @param item the item whose associated value is the operator
-     * @param operation the operation to apply to the current item's value
-     * @param <T> the value's type
-     * @return the new item's value returned by {@code operation}
+     * <p>Unlike regular maps, if the mapping function returns {@code null},
+     * a {@link NullPointerException} is thrown.
+     *
+     * @param key key with which the computed value is to be associated
+     * @param mappingFunction mapping function to compute a value
+     * @param <T> the type of the value
+     * @return the current (existing or computed) value associated with the specified key
+     * @throws NullPointerException if the mapping function returns {@code null}
      */
-    <T> Optional<T> apply(Item<T> item, UnaryOperator<T> operation);
+    <T> T computeIfAbsent(Key<T> key, Supplier<? extends T> mappingFunction);
 
     /**
-     * Applies the given operation on the current item's value. The produced result
-     * replaces the old value. If no value is set, the item's default value
-     * (which can be null) gets passed as the operand.
+     * If the value associated to the specified key is present, attempts to compute
+     * a new mapping given its current mapped value.
      *
-     * @param item the item whose associated value is the operator. The first {@link BiFunction#apply(Object, Object)} argument
-     * @param operation the operation to apply to the current item's value
-     * @param <T> the value's type
-     * @return the new item's value returned by {@code operation}
+     * <p>If the remapping function returns {@code null}, the mapping is removed.
+     * If the remapping function itself throws an (unchecked) exception, the
+     * exception is rethrown, and the current mapping is left unchanged.
+     *
+     * @param key key with which the computed value is to be associated
+     * @param remappingFunction remapping function to compute a value
+     * @param <T> the type of the value
+     * @return the new value associated with the specified key, or {@code null} if none
      */
-    <T> Optional<T> apply(Item<T> item, BiFunction<Item<T>, T, T> operation);
+    @Nullable
+    <T> T computeIfPresent(Key<T> key, UnaryOperator<T> remappingFunction);
 
     /**
-     * Removes the value associated with the given item.
+     * Replaces the value associated with the specified key only if it is
+     * currently mapped to some value.
      *
-     * @param item the item whose associated value is to be removed
-     * @param <T> the value's type
-     * @return the previous item's value, or {@link Optional#empty()} if no value was set
+     * @param key key with which the specified value is to be associated
+     * @param value value to be associated with the specified key
+     * @param <T> the type of the value
+     * @return the previous value associated with {@code key}, or {@code null} if
+     *         there was no mapping for {@code key}
      */
-    <T> Optional<T> removeValue(Item<T> item);
+    @Nullable
+    <T> T replace(Key<T> key, T value);
+
+    /**
+     * Replaces the value associated with the specified key only if it is
+     * currently mapped to {@code oldValue}.
+     *
+     * @param key key with which the specified value is to be associated
+     * @param oldValue value expected to be associated with the specified key
+     * @param newValue value to be associated with the specified key
+     * @param <T> the type of the value
+     * @return {@code true} if the value was replaced
+     */
+    <T> boolean replace(Key<T> key, T oldValue, T newValue);
+
+    /**
+     * Removes the mapping for a key from this repository if it is present.
+     *
+     * @param key key whose mapping is to be removed from the repository
+     * @param <T> the type of the value
+     * @return the previous value associated with {@code key}, or {@code null} if
+     *         there was no mapping for {@code key}
+     */
+    @Nullable
+    <T> T remove(Key<T> key);
+
+    /**
+     * Removes the mapping for the specified key only if it is currently
+     * mapped to the specified value.
+     *
+     * @param key key whose mapping is to be removed from the repository
+     * @param value value expected to be associated with the specified key
+     * @param <T> the type of the value
+     * @return {@code true} if the value was removed
+     */
+    <T> T remove(Key<T> key, T value);
+
+    /**
+     * Removes all of the mappings from this repository.
+     */
+    void clear();
+
+    /**
+     * Returns {@code true} if this map contains a mapping for the specified key.
+     *
+     * @param key key whose presence in this repository is to be tested
+     * @return {@code true} if this repository contains a mapping for the specified key
+     */
+    boolean contains(Key<?> key);
+
+    /**
+     * Returns the number of key-value mappings in this repository.
+     *
+     * @return the number of key-value mappings in this repository
+     */
+    int size();
+
+    /**
+     * Returns {@code true} if this repository contains no key-value mappings.
+     *
+     * @return {@code true} if this repository contains no key-value mappings
+     */
+    boolean isEmpty();
 }
