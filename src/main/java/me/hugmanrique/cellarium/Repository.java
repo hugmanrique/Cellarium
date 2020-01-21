@@ -1,6 +1,8 @@
 package me.hugmanrique.cellarium;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * A typesafe heterogeneous container that maps {@link Key}s to values.
@@ -9,6 +11,8 @@ import javax.annotation.Nullable;
  * This means that all the keys are of different types, allowing a {@code Repository}
  * instance to hold values of many (i.e. heterogeneous) types. This type token is
  * used to guarantee that the type of a value agrees with its {@link Key}.
+ *
+ * TODO Document no null keys allowed
  *
  * @since 1.0
  * @author Hugo Manrique
@@ -54,6 +58,53 @@ public interface Repository {
      */
     @Nullable
     <T> T putIfAbsent(Key<T> key, T value);
+
+    /**
+     * Attempts to compute a mapping for the specified key and its current mapped
+     * value (or the key's default value if there is no current mapping).
+     *
+     * <p>If the remapping function returns {@code null}, the mapping is removed.
+     * If the remapping function itself throws an (unchecked) exception, the
+     * exception is rethrown, and the current mapping is left unchanged.
+     *
+     * @param key key with which the computed value is to be associated
+     * @param remappingFunction remapping function to compute a value
+     * @param <T> the type of the value
+     * @return the new value associated with the specified key, or {@code null} if none
+     */
+    @Nullable
+    <T> T compute(Key<T> key, UnaryOperator<T> remappingFunction);
+
+    /**
+     * If the specified key is not already associated with a value, attempts to
+     * compute its value using the given mapping function and enters it into
+     * this repository.
+     *
+     * <p>Unlike regular maps, if the mapping function returns {@code null},
+     * {@link NullPointerException} is thrown.
+     *
+     * @param key key with which the computed value is to be associated
+     * @param mappingFunction mapping function to compute a value
+     * @param <T> the type of the value
+     * @return the current (existing or computed) value associated with the specified key
+     * @throws NullPointerException if the mapping function returns {@code null}
+     */
+    <T> T computeIfAbsent(Key<T> key, Supplier<? extends T> mappingFunction);
+
+    /**
+     * If the value associated to the specified key is present, attempts to compute
+     * a new mapping given its current mapped value.
+     *
+     * <p>If the remapping function returns {@code null}, the mapping is removed.
+     * If the remapping function itself throws an (unchecked) exception, the
+     * exception is rethrown, and the current mapping is left unchanged.
+     *
+     * @param key key with which the computed value is to be associated
+     * @param remappingFunction remapping function to compute a value
+     * @param <T> the type of the value
+     * @return the new value associated with the specified key, or {@code null} if none
+     */
+    <T> T computeIfPresent(Key<T> key, UnaryOperator<T> remappingFunction);
 
     /**
      * Replaces the value associated with the specified key only if it is

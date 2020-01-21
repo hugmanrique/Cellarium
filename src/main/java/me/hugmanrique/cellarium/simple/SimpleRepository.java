@@ -7,7 +7,9 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import static java.util.Objects.requireNonNull;
 
@@ -100,6 +102,44 @@ public class SimpleRepository implements Repository {
 
         return key.cast(
                 items.putIfAbsent(key, requireNonNull(value, "value")));
+    }
+
+    private <T> BiFunction<? super Key<?>, ? super Object, ?> wrapRemappingFunction(Key<T> key, UnaryOperator<T> remappingFunction) {
+        return (key1, object) -> {
+            T value = key.cast(object);
+
+            // Fallback to key default value
+            if (value == null) {
+                value = key.defaultValue();
+            }
+
+            return remappingFunction.apply(value);
+        };
+    }
+
+    @Override
+    public <T> T compute(Key<T> key, UnaryOperator<T> remappingFunction) {
+        requireNonNull(key, "key");
+
+        return key.cast(
+                items.compute(key, wrapRemappingFunction(key, remappingFunction)));
+    }
+
+    @Override
+    public <T> T computeIfAbsent(Key<T> key, Supplier<? extends T> mappingFunction) {
+        requireNonNull(key, "key");
+
+        return key.cast(
+                items.computeIfAbsent(key, key1 ->
+                        requireNonNull(mappingFunction.get(), "new value")));
+    }
+
+    @Override
+    public <T> T computeIfPresent(Key<T> key, UnaryOperator<T> remappingFunction) {
+        requireNonNull(key, "key");
+
+        return key.cast(
+                items.computeIfPresent(key, wrapRemappingFunction(key, remappingFunction)));
     }
 
     @Nullable

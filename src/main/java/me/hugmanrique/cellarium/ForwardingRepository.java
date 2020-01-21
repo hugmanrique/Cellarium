@@ -2,6 +2,8 @@ package me.hugmanrique.cellarium;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * A repository that forwards all its method calls to another repository.
@@ -34,6 +36,22 @@ public class ForwardingRepository implements Repository {
     @Override
     public <T> T putIfAbsent(Key<T> key, T value) {
         return repository.putIfAbsent(key, value);
+    }
+
+    @Nullable
+    @Override
+    public <T> T compute(Key<T> key, UnaryOperator<T> remappingFunction) {
+        return repository.compute(key, remappingFunction);
+    }
+
+    @Override
+    public <T> T computeIfAbsent(Key<T> key, Supplier<? extends T> mappingFunction) {
+        return repository.computeIfAbsent(key, mappingFunction);
+    }
+
+    @Override
+    public <T> T computeIfPresent(Key<T> key, UnaryOperator<T> remappingFunction) {
+        return repository.computeIfPresent(key, remappingFunction);
     }
 
     @Nullable
