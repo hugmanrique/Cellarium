@@ -1,5 +1,7 @@
 package me.hugmanrique.cellarium.v2;
 
+import javax.annotation.Nullable;
+
 /**
  * A typesafe heterogeneous container that maps {@link Key}s to values.
  *
@@ -23,6 +25,7 @@ public interface Repository {
      * @return the value to which the specified key is mapped, or the key's default
      *         value if this repository contains no mapping for the key
      */
+    @Nullable
     <T> T get(Key<T> key);
 
     /**
@@ -36,6 +39,7 @@ public interface Repository {
      * @return the previous value associated with {@code key}, or {@code null} if
      *         there was no mapping for {@code key}
      */
+    @Nullable
     <T> T put(Key<T> key, T value);
 
     /**
@@ -48,6 +52,7 @@ public interface Repository {
      * @return the previous value associated with {@code key}, or {@code null} if
      *         there was no mapping for {@code key}
      */
+    @Nullable
     <T> T putIfAbsent(Key<T> key, T value);
 
     /**
@@ -60,6 +65,7 @@ public interface Repository {
      * @return the previous value associated with {@code key}, or {@code null} if
      *         there was no mapping for {@code key}
      */
+    @Nullable
     <T> T replace(Key<T> key, T value);
 
     /**
@@ -82,6 +88,7 @@ public interface Repository {
      * @return the previous value associated with {@code key}, or {@code null} if
      *         there was no mapping for {@code key}
      */
+    @Nullable
     <T> T remove(Key<T> key);
 
     /**

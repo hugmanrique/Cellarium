@@ -5,14 +5,14 @@ import java.util.Optional;
 /**
  * A parameterized key that can be mapped to values in a {@link Repository}.
  *
- * @param <T> the type token of value instances that can be mapped from this key
+ * @param <T> the type of value instances that can be mapped from this key
  */
 public interface Key<T> {
 
     /**
-     * Returns the type token of value instances that can be mapped from this key.
+     * Returns the type of value instances that can be mapped from this key.
      *
-     * @return the type token of value instances
+     * @return the type of value instances
      */
     Class<T> type();
 
