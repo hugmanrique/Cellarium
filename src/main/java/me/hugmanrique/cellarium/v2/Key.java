@@ -1,12 +1,14 @@
 package me.hugmanrique.cellarium.v2;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
- * A parameterized key that can be mapped to values in a {@link Repository}.
+ * An immutable parameterized key that can be mapped to values in a {@link Repository}.
  *
  * @param <T> the type of value instances that can be mapped from this key
  */
+@ThreadSafe
 public interface Key<T> {
 
     /**

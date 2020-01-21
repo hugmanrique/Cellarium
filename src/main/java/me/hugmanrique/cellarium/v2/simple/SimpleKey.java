@@ -6,7 +6,7 @@ import me.hugmanrique.cellarium.v2.Repository;
 import java.util.Objects;
 
 /**
- * An immutable {@link Key}.
+ * A simple {@link Key} implementation.
  *
  * @param <T> the type of value instances that can be mapped from this key
  * @see Builder to create instances of this class
