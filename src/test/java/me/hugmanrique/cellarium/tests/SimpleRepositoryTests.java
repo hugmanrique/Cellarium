@@ -59,9 +59,11 @@ public class SimpleRepositoryTests {
         });
     }
 
+    private static final int BAR_DEFAULT = 20;
+
     private static final Key<String> FOO = new SimpleKey.Builder<>(String.class).build();
     private static final Key<Integer> BAR = new SimpleKey.Builder<>(Integer.class)
-            .defaultValue(20)
+            .defaultValue(BAR_DEFAULT)
             .build();
 
     // Retrieval
@@ -102,7 +104,7 @@ public class SimpleRepositoryTests {
         // Returns default after remove
         repository.remove(BAR);
         assertFalse(repository.contains(BAR));
-        assertEquals(20, repository.get(BAR));
+        assertEquals(BAR_DEFAULT, repository.get(BAR));
     }
 
     @Test
@@ -110,23 +112,78 @@ public class SimpleRepositoryTests {
         SimpleRepository repository = SimpleRepository.newInstance();
 
         repository.putIfAbsent(FOO, "bar");
-        assertTrue(repository.contains(FOO));
         assertEquals("bar", repository.get(FOO));
 
         // Puts even if has default
         repository.putIfAbsent(BAR, 12);
-        assertTrue(repository.contains(BAR));
         assertEquals(12, repository.get(BAR));
 
         // Doesn't replace existing value
-        repository.putIfAbsent(FOO, "nonbar");
-        assertTrue(repository.contains(FOO));
+        repository.putIfAbsent(FOO, "nope");
         assertEquals("bar", repository.get(FOO));
     }
 
     @Test
     void testReplace() {
+        SimpleRepository repository = SimpleRepository.newInstance();
 
+        repository.replace(FOO, "bar");
+        assertFalse(repository.contains(FOO));
+
+        repository.replace(BAR, 2);
+        assertFalse(repository.contains(BAR));
+
+        // Setup
+        repository.put(FOO, "bar");
+        repository.put(BAR, 30);
+
+        // Key tests
+
+        repository.replace(FOO, "yes");
+        assertEquals("yes", repository.get(FOO));
+
+        repository.replace(BAR, 3);
+        assertEquals(3, repository.get(BAR));
+
+        // Key, value tests
+
+        repository.replace(FOO, "no", "no");
+        assertEquals("yes", repository.get(FOO));
+
+        repository.replace(BAR, 3, 12);
+        assertEquals(12, repository.get(BAR));
+    }
+
+    @Test
+    void testClear() {
+        SimpleRepository repository = SimpleRepository.newInstance();
+
+        repository.put(FOO, "bar");
+        repository.put(BAR, 10);
+
+        repository.clear();
+
+        assertTrue(repository.isEmpty());
+        assertNull(repository.get(FOO));
+        assertEquals(BAR_DEFAULT, repository.get(BAR));
+    }
+
+    @Test
+    void testSizeAndIsEmpty() {
+        SimpleRepository repository = SimpleRepository.newInstance();
+
+        assertTrue(repository.isEmpty());
+        assertEquals(0, repository.size());
+
+        repository.put(FOO, "bar");
+        assertFalse(repository.isEmpty());
+        assertEquals(1, repository.size());
+
+        repository.put(FOO, "other");
+        assertEquals(1, repository.size());
+
+        repository.put(BAR, 12);
+        assertEquals(2, repository.size());
     }
 
     @SuppressWarnings("ConstantConditions")
