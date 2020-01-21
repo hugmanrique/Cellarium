@@ -97,7 +97,7 @@ public class Player {
 ```
 
 Repositories have a really similar API to [`java.util.Map`](https://docs.oracle.com/javase/10/docs/api/java/util/Map.html). In this case, we used the `#compute(Key<T>, UnaryOperator<T>)` method to atomically update the ELO and win count of the player.
-For the later, we used the [`IntegerValues.increment`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/IntegerValues.html#increment(int)) method reference. Cellarium includes value utilities for most primitives
+For the latter, we used the [`IntegerValues.increment`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/IntegerValues.html#increment(int)) method reference. Cellarium includes value utilities for most primitives
 in the [`me.hugmanrique.cellarium.util`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/package-summary.html) package.
 
 Finally, let's add a `levelUp` method to `Player`:
