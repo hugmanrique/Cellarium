@@ -33,7 +33,7 @@ Next, add the `Cellarium` dependency:
 </dependency>
 ```
 
-You will need to have Java 11 or later (older versions _might_ work).
+You will need to have Java 8 or later.
 
 ## Usage
 
@@ -44,7 +44,7 @@ First, let's create a [`Repository`](https://jitpack.io/com/github/hugmanrique/C
 ```java
 public class Player {
     private final Repository statistics;
-    
+
     public Player() {
         // ...
         this.statistics = Repository.create();
@@ -59,7 +59,7 @@ public final class ChessStatistics {
     public static final Item<Integer> ELO = new SimpleItem.Builder<>("elo", Integer.class)
             .defaultValue(1200)
             .build();
-    
+
     public static final Item<Integer> WINS = new SimpleItem.Builder<>("wins", Integer.class)
             .defaultValue(0)
             .build();
@@ -67,7 +67,7 @@ public final class ChessStatistics {
     public static final Item<Boolean> WON_LAST_MATCH = new SimpleItem.Builder<>("won_last_match", Boolean.class)
             .defaultValue(false)
             .build();
-} 
+}
 ```
 
 Finally, let's create an `onWin` method:
@@ -75,14 +75,14 @@ Finally, let's create an `onWin` method:
 ```java
 public class Player {
     // ...
-    
+
     public void onWin() {
         // Set new ranking
         int eloDiff = 4; // TODO Perform actual calculation
         statistics.apply(ChessStatistics.ELO, value -> value + eloDiff);
 
         // Increment win count by 1
-        statistics.apply(ChessStatistics.WINS, IntStatistics::increment);
+        statistics.apply(ChessStatistics.WINS, IntItems::increment);
 
         // Set won last match
         statistics.setValue(ChessStatistics.WON_LAST_MATCH, true);
@@ -90,7 +90,7 @@ public class Player {
 }
 ```
 
-Repositories can store any kind of object. In this case, we used [`IntStatistics`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/IntStatistics.html) to handle common tasks such as incrementing a statistic.
+Repositories can store any kind of object. In this case, we used [`IntItems`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/IntItems.html) to handle common tasks such as incrementing a statistic.
 
 ## Enum example
 
@@ -109,7 +109,7 @@ Now, let's create the `RANK` statistic:
 ```java
 public final class ChessStatistics {
     // ...
-    
+
     public static final Item<Rank> RANK = new SimpleItem.Builder<>("rank", Rank.class)
             .defaultValue(Rank.BEGINNER)
             .build();
@@ -121,25 +121,25 @@ Finally, let's add a level-up method to the `Player` class:
 ```java
 public class Player {
     // ...
-    
+
     public void levelUp() {
         if (statistics.getValue(ChessStatistics.RANK).equals(Optional.of(Rank.MASTER))) {
             throw new IllegalStateException("Cannot rank-up player with highest rank");
         }
-        
-        statistics.apply(ChessStatistics.RANK, EnumStatistics::getNextValue);
+
+        statistics.apply(ChessStatistics.RANK, EnumItems::getNextValue);
     }
 }
 ```
 
-In this case we explicitly handled the case where the player already has the highest rank, but `EnumStatistics::getNextValue` cycles back to the first enum constant.
+In this case we explicitly handled the case where the player already has the highest rank, but `EnumItems::getNextValue` cycles back to the first enum constant.
 
-You can read [`EnumStatistics`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/EnumStatistics.html) for additional documentation.
-Cellarium also includes utilities for booleans in [`BooleanStatistics`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/BooleanStatistics.html).
+You can read [`EnumItems`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/EnumItems.html) for additional documentation.
+Cellarium also includes utilities for booleans in [`BooleanItems`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/util/BooleanItems.html).
 
 Please note repositories are **not** thread-safe, so you will need to add synchronization for concurrent access.
 
-Additional documentation for individual features can be found in the [Javadoc](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/). For additional help, you can create an issue and I will try to respond as fast as I can.  
+Additional documentation for individual features can be found in the [Javadoc](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/). For additional help, you can create an issue and I will try to respond as fast as I can.
 
 # License
 

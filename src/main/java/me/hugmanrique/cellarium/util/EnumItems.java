@@ -10,9 +10,9 @@ import java.util.function.BiFunction;
 /**
  * Repository and item utilities related to enumerations.
  */
-public final class EnumStatistics {
+public final class EnumItems {
 
-    private EnumStatistics() {
+    private EnumItems() {
         throw new AssertionError();
     }
 

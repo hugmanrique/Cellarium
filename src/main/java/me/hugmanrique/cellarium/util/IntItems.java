@@ -10,9 +10,9 @@ import java.util.function.UnaryOperator;
 /**
  * Repository and item utilities related to integers.
  */
-public final class IntStatistics {
+public final class IntItems {
 
-    private IntStatistics() {
+    private IntItems() {
         throw new AssertionError();
     }
 
@@ -26,7 +26,7 @@ public final class IntStatistics {
      * @return the item's value after incrementation
      */
     public static int addToValue(Repository repository, Item<Integer> item, int addend) {
-        int oldValue = repository.getValue(item).orElseThrow();
+        int oldValue = repository.getValue(item).get();
         int newValue = oldValue + addend;
 
         repository.setValue(item, newValue);
