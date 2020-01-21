@@ -14,5 +14,5 @@ package me.hugmanrique.cellarium.v2;
  */
 public interface Repository {
 
-    boolean contains(Key<?> item);
+    boolean contains(Key<?> key);
 }
