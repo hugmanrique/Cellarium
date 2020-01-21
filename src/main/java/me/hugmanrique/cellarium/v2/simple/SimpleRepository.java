@@ -35,7 +35,7 @@ public class SimpleRepository implements Repository {
      *
      * @return a thread-safe {@code SimpleRepository}
      */
-    public static SimpleRepository newThreadSafeInstance() {
+    public static SimpleRepository newConcurrentInstance() {
         return newInstance(ConcurrentHashMap::new);
     }
 
@@ -59,6 +59,9 @@ public class SimpleRepository implements Repository {
     public static SimpleRepository newInstance(Supplier<Map<Key<?>, Object>> mapSupplier) {
         Map<Key<?>, Object> values = requireNonNull(mapSupplier.get(), "suppliedMap");
 
+        // By checking if the supplied map is empty we're ensuring type-safety (unless the
+        // map is modified externally) since Java's type system is not capable of expressing
+        // the relation between key and value.
         if (!values.isEmpty()) {
             throw new IllegalArgumentException("Supplied map is not empty");
         }
