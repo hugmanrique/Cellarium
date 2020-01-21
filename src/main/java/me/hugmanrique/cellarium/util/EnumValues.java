@@ -29,8 +29,6 @@ public final class EnumValues {
 
         // Lineally search previous index
         for (int i = 0; i < constants.length; i++) {
-            T constant = constants[i];
-
             if (constants[i] == element) {
                 previousIndex = i;
                 break;

@@ -49,6 +49,7 @@ public class ForwardingRepository implements Repository {
         return repository.computeIfAbsent(key, mappingFunction);
     }
 
+    @Nullable
     @Override
     public <T> T computeIfPresent(Key<T> key, UnaryOperator<T> remappingFunction) {
         return repository.computeIfPresent(key, remappingFunction);

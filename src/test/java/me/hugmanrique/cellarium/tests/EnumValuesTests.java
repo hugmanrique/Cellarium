@@ -1,7 +1,5 @@
 package me.hugmanrique.cellarium.tests;
 
-import me.hugmanrique.cellarium.Key;
-import me.hugmanrique.cellarium.simple.SimpleKey;
 import me.hugmanrique.cellarium.util.EnumValues;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +14,6 @@ public class EnumValuesTests {
     enum Color {
         RED, YELLOW, GREEN, BLUE
     }
-
-    private static final Key<Vehicle> VEHICLE_KEY = new SimpleKey.Builder<>(Vehicle.class).build();
-    private static final Key<Color> COLOR_KEY = new SimpleKey.Builder<>(Color.class).build();
 
     @Test
     void testNextValue_offset() {

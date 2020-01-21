@@ -31,6 +31,8 @@ public class SimpleKey<T> implements Key<T> {
         return defaultValue;
     }
 
+    // TODO Add toString, hashCode
+
     /**
      * Used to build instances of {@link SimpleKey} from values configured by
      * the setters. A {@link SimpleKey} object created by a {@code Builder} is

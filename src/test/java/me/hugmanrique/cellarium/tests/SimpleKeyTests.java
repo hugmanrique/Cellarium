@@ -30,6 +30,7 @@ public class SimpleKeyTests {
     @Test
     void testNullValueTypeThrows() {
         assertThrows(NullPointerException.class, () -> {
+            //noinspection ConstantConditions
             new SimpleKey.Builder<>(null);
         });
     }
