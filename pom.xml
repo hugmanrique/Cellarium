@@ -8,20 +8,64 @@
     <artifactId>cellarium</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <name>Cellarium</name>
+
+    <description>A typesafe heterogeneous container API</description>
+    <inceptionYear>2019</inceptionYear>
+    <url>https://github.com/hugmanrique/Cellarium</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <junit.version>5.6.0-M1</junit.version>
+    </properties>
+
+    <scm>
+        <connection>scm:git:git@github.com:hugmanrique/Cellarium</connection>
+        <developerConnection>scm:git:git@github.com:hugmanrique/Cellarium</developerConnection>
+        <url>https://github.com/hugmanrique/Cellarium</url>
+    </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
-                <configuration>
-                    <release>11</release>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.1.0</version>
+                <configuration>
+                    <links>
+                        <link>https://docs.oracle.com/javase/10/docs/api/</link>
+                    </links>
+                    <!-- Disable strict doclint tool in Java 8 -->
+                    <doclint>none</doclint>
+                    <quiet>true</quiet>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
