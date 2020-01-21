@@ -1,7 +1,7 @@
-package me.hugmanrique.cellarium.v2.simple;
+package me.hugmanrique.cellarium.simple;
 
-import me.hugmanrique.cellarium.v2.Key;
-import me.hugmanrique.cellarium.v2.Repository;
+import me.hugmanrique.cellarium.Key;
+import me.hugmanrique.cellarium.Repository;
 
 import java.util.Objects;
 

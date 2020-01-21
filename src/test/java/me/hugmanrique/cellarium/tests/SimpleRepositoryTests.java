@@ -1,8 +1,8 @@
 package me.hugmanrique.cellarium.tests;
 
-import me.hugmanrique.cellarium.v2.Key;
-import me.hugmanrique.cellarium.v2.simple.SimpleKey;
-import me.hugmanrique.cellarium.v2.simple.SimpleRepository;
+import me.hugmanrique.cellarium.Key;
+import me.hugmanrique.cellarium.simple.SimpleKey;
+import me.hugmanrique.cellarium.simple.SimpleRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -59,14 +59,14 @@ public class SimpleRepositoryTests {
         });
     }
 
+    // Item management
+
     private static final int BAR_DEFAULT = 20;
 
     private static final Key<String> FOO = new SimpleKey.Builder<>(String.class).build();
     private static final Key<Integer> BAR = new SimpleKey.Builder<>(Integer.class)
             .defaultValue(BAR_DEFAULT)
             .build();
-
-    // Retrieval
 
     @Test
     void testNonMappedGets() {

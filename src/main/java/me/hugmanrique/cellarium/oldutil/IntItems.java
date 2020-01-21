@@ -1,10 +1,6 @@
-package me.hugmanrique.cellarium.util;
-
-import me.hugmanrique.cellarium.Item;
-import me.hugmanrique.cellarium.Repository;
+package me.hugmanrique.cellarium.oldutil;
 
 import java.util.NoSuchElementException;
-import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
 /**

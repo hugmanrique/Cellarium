@@ -1,4 +1,4 @@
-package me.hugmanrique.cellarium.util;
+package me.hugmanrique.cellarium.oldutil;
 
 /**
  * Repository and item utilities related to booleans.

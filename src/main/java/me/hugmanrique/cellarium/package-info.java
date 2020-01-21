@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package me.hugmanrique.cellarium.v2;
+package me.hugmanrique.cellarium;
 
 import javax.annotation.ParametersAreNonnullByDefault;

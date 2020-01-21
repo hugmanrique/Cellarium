@@ -1,6 +1,6 @@
 package me.hugmanrique.cellarium.tests;
 
-import me.hugmanrique.cellarium.v2.simple.SimpleKey;
+import me.hugmanrique.cellarium.simple.SimpleKey;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
