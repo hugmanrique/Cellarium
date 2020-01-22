@@ -3,6 +3,7 @@ package me.hugmanrique.cellarium.simple;
 import me.hugmanrique.cellarium.Key;
 import me.hugmanrique.cellarium.Repository;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -31,7 +32,13 @@ public class SimpleKey<T> implements Key<T> {
         return defaultValue;
     }
 
-    // TODO Add toString, hashCode
+    @Override
+    public String toString() {
+        return "SimpleKey{" +
+                "type=" + type +
+                ", defaultValue=" + defaultValue +
+                '}';
+    }
 
     /**
      * Used to build instances of {@link SimpleKey} from values configured by
@@ -64,7 +71,7 @@ public class SimpleKey<T> implements Key<T> {
          * @param defaultValue the default value associated to the key
          * @return this builder
          */
-        public Builder<T> defaultValue(T defaultValue) {
+        public Builder<T> defaultValue(@Nullable T defaultValue) {
             this.defaultValue = defaultValue;
             return this;
         }

@@ -12,7 +12,8 @@ import java.util.function.UnaryOperator;
  * instance to hold values of many (i.e. heterogeneous) types. This type token is
  * used to guarantee that the type of a value agrees with its {@link Key}.
  *
- * TODO Document no null keys allowed
+ * <p>{@code null} {@link Key}s are prohibited. Attempting to insert a {@code null}
+ * key will throw {@link NullPointerException}.
  *
  * @since 1.0
  * @author Hugo Manrique
