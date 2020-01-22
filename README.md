@@ -2,6 +2,7 @@
 
 [![jitpack][jitpack]][jitpack-url]
 [![tests][tests]][tests-url]
+[![coverage][coverage]][coverage-url]
 [![license][license]][license-url]
 
 **Cellarium** is a typesafe heterogeneous container API. Unlike a regular map, the [`Repository`](https://jitpack.io/com/github/hugmanrique/Cellarium/master-SNAPSHOT/javadoc/me/hugmanrique/cellarium/Repository.html) _keys_ are parameterized instead of the map.
@@ -119,10 +120,11 @@ Additional documentation for individual features can be found in the [javadocs](
 
 [MIT](LICENSE) &copy; [Hugo Manrique](https://hugmanrique.me)
 
-
 [jitpack]: https://jitpack.io/v/hugmanrique/Cellarium.svg
 [jitpack-url]: https://jitpack.io/#hugmanrique/Cellarium
-[tests]: https://img.shields.io/travis/hugmanrique/Cellarium/master.svg
+[tests]: https://api.travis-ci.org/hugmanrique/Cellarium.svg?branch=master
 [tests-url]: https://travis-ci.org/hugmanrique/Cellarium
+[coverage]: https://coveralls.io/repos/github/hugmanrique/Cellarium/badge.svg?branch=master
+[coverage-url]: https://coveralls.io/github/hugmanrique/Cellarium
 [license]: https://img.shields.io/github/license/hugmanrique/Cellarium.svg
 [license-url]: LICENSE
