@@ -60,4 +60,14 @@ public class SimpleKeyTests {
             foo.cast(123);
         });
     }
+
+    @Test
+    void testNonEquality() {
+        SimpleKey.Builder<String> builder = new SimpleKey.Builder<>(String.class);
+
+        assertNotEquals(builder.build(), builder.build());
+        assertNotEquals(builder.defaultValue("abc").build(), builder.defaultValue("abc").build());
+        assertNotEquals(builder.defaultValue("abc").build(), builder.defaultValue("123").build());
+        assertNotEquals(builder.defaultValue("abc").build(), builder.defaultValue(null).build());
+    }
 }
