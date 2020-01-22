@@ -5,6 +5,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * An immutable parameterized key that can be mapped to values in a {@link Repository}.
+ * Two keys are equal only if they have the same identity.
  *
  * @param <T> the type of value instances that can be mapped from this key
  */
