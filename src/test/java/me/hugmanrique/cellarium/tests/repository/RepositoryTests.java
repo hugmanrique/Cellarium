@@ -1,62 +1,29 @@
-package me.hugmanrique.cellarium.tests;
+package me.hugmanrique.cellarium.tests.repository;
 
 import me.hugmanrique.cellarium.Key;
+import me.hugmanrique.cellarium.Repository;
 import me.hugmanrique.cellarium.simple.SimpleKey;
-import me.hugmanrique.cellarium.simple.SimpleRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SimpleRepositoryTests {
+/**
+ * Provides base assertions for {@link Repository} implementations.
+ */
+@Disabled
+public abstract class RepositoryTests {
+
+    protected abstract Repository newRepository();
 
     // Creation
 
     @Test
     void testNewInstance() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         assertNotNull(repository);
         assertTrue(repository.isEmpty());
-    }
-
-    @Test
-    void testNewConcurrentInstance() {
-        SimpleRepository repository = SimpleRepository.newConcurrentInstance();
-
-        assertNotNull(repository);
-        assertTrue(repository.isEmpty());
-    }
-
-    @Test
-    void testValidNewInstance() {
-        SimpleRepository repository = SimpleRepository.newInstance(HashMap::new);
-
-        assertNotNull(repository);
-        assertTrue(repository.isEmpty());
-    }
-
-    @Test
-    void testNullSuppliedMapThrows() {
-        assertThrows(NullPointerException.class, () -> {
-            SimpleRepository.newInstance(() -> null);
-        });
-    }
-
-    @Test
-    void testNonEmptySuppliedMapThrows() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            SimpleRepository.newInstance(() -> {
-                Map<Key<?>, Object> items = new HashMap<>();
-
-                Key<String> foo = new SimpleKey.Builder<>(String.class).build();
-                items.put(foo, "bar");
-
-                return items;
-            });
-        });
     }
 
     // Item management
@@ -70,7 +37,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testNonMappedGets() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         assertFalse(repository.contains(FOO));
         assertNull(repository.get(FOO));
@@ -80,7 +47,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testGetAndPut() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         String previous = repository.put(FOO, "bar");
         assertTrue(repository.contains(FOO));
@@ -95,7 +62,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testRemove() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
         repository.put(FOO, "bar");
 
         // Returns null after remove
@@ -128,7 +95,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testPutIfAbsent() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         String previous = repository.putIfAbsent(FOO, "bar");
         assertEquals("bar", repository.get(FOO));
@@ -147,7 +114,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testCompute() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         // No current mapping
 
@@ -200,7 +167,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testComputeRethrows() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         assertThrows(IllegalArgumentException.class, () -> {
             repository.compute(FOO, previous -> {
@@ -217,7 +184,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testComputeIfAbsent() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         // No current mapping
 
@@ -240,7 +207,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testComputeIfAbsentThrowsNPE() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         assertThrows(NullPointerException.class, () -> {
             repository.computeIfAbsent(FOO, () -> null);
@@ -253,7 +220,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testComputeIfAbsentRethrows() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         assertThrows(IllegalArgumentException.class, () -> {
             repository.computeIfAbsent(FOO, () -> {
@@ -270,7 +237,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testComputeIfPresent() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         // No current mapping
 
@@ -323,7 +290,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testComputeIfPresentRethrows() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         repository.put(FOO, "bar");
         repository.put(BAR, 12);
@@ -343,7 +310,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testReplace() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         String previous = repository.replace(FOO, "bar");
         assertFalse(repository.contains(FOO));
@@ -378,7 +345,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testClear() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         repository.put(FOO, "bar");
         repository.put(BAR, 10);
@@ -392,7 +359,7 @@ public class SimpleRepositoryTests {
 
     @Test
     void testSizeAndIsEmpty() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         assertTrue(repository.isEmpty());
         assertEquals(0, repository.size());
@@ -411,7 +378,7 @@ public class SimpleRepositoryTests {
     @SuppressWarnings("ConstantConditions")
     @Test
     void testNullParams() {
-        SimpleRepository repository = SimpleRepository.newInstance();
+        Repository repository = newRepository();
 
         assertThrows(NullPointerException.class, () -> repository.get(null));
         assertThrows(NullPointerException.class, () -> repository.put(null, "dummy"));
