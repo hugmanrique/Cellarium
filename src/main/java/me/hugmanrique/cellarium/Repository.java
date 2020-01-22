@@ -152,7 +152,7 @@ public interface Repository {
      * @param <T> the type of the value
      * @return {@code true} if the value was removed
      */
-    <T> T remove(Key<T> key, T value);
+    <T> boolean remove(Key<T> key, T value);
 
     /**
      * Removes all of the mappings from this repository.

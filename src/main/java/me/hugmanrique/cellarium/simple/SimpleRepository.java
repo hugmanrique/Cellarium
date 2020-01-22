@@ -169,11 +169,11 @@ public class SimpleRepository implements Repository {
     }
 
     @Override
-    public <T> T remove(Key<T> key, T value) {
+    public <T> boolean remove(Key<T> key, T value) {
         requireNonNull(key, "key");
 
-        return key.cast(
-                items.remove(key, requireNonNull(value, "value")));
+        return items.remove(
+                requireNonNull(key, "key"), requireNonNull(value, "value"));
     }
 
     @Override

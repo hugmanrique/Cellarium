@@ -73,7 +73,7 @@ public class ForwardingRepository implements Repository {
     }
 
     @Override
-    public <T> T remove(Key<T> key, T value) {
+    public <T> boolean remove(Key<T> key, T value) {
         return repository.remove(key, value);
     }
 

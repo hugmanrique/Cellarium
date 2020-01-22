@@ -109,6 +109,21 @@ public class SimpleRepositoryTests {
         assertFalse(repository.contains(BAR));
         assertEquals(BAR_DEFAULT, repository.get(BAR));
         assertNull(previous2);
+
+        repository.put(FOO, "bar");
+        assertFalse(repository.remove(FOO, "abc"));
+
+        assertTrue(repository.remove(FOO, "bar"));
+        assertFalse(repository.contains(FOO));
+        assertNull(repository.get(FOO));
+
+        assertFalse(repository.remove(BAR, BAR_DEFAULT));
+        assertFalse(repository.remove(BAR, 12));
+
+        repository.put(BAR, 16);
+        assertFalse(repository.remove(BAR, 14));
+        assertTrue(repository.remove(BAR, 16));
+        assertFalse(repository.contains(BAR));
     }
 
     @Test
