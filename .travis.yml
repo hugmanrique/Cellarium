@@ -3,12 +3,10 @@ language: java
 jdk:
 - openjdk8
 
-# Send coverage data to Coveralls
-deploy:
-  provider: script
-  script: mvn coveralls:report -DrepoToken=$COVERALLS_REPO_TOKEN
-  on:
-    branch: master
+# Send coverage data to Coveralls (only on master)
+after_success:
+- test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" &&
+  mvn coveralls:report -DrepoToken=$COVERALLS_REPO_TOKEN
 
 notifications:
   email: false
